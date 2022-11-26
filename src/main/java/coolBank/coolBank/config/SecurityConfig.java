@@ -48,6 +48,8 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/member/my-page").authenticated()
+                        .requestMatchers("/normal-account/post").authenticated()
+                        .requestMatchers("/credit-account/post").authenticated()
                 )
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
