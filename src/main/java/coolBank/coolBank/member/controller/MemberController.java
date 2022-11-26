@@ -1,5 +1,7 @@
 package coolBank.coolBank.member.controller;
 
+import coolBank.coolBank.account.model.Account;
+import coolBank.coolBank.account.service.AccountService;
 import coolBank.coolBank.member.dto.ChangeEmailRequest;
 import coolBank.coolBank.member.dto.ChangePasswordRequest;
 import coolBank.coolBank.member.dto.MemberRequest;
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +32,7 @@ import java.security.Principal;
 public class MemberController {
 
     private final MemberService memberService;
+    private final AccountService accountService;
 
     public static final int NOT_DUPLICATE = 1;
     public static final int PASSWORD_MATCH = 1;
@@ -125,9 +131,16 @@ public class MemberController {
     public ResponseEntity<?> myPage(
             Principal principal
     ) {
-        MemberResponse member = memberService.getMemberByEmail(principal.getName());
+        Map<String, Object> map = new HashMap<>();
 
-        return ResponseEntity.ok(member);
+        MemberResponse member = memberService.getMemberByEmail(principal.getName());
+        List<Account> myAccountList =
+                accountService.getMyAccountList(principal.getName());
+
+        map.put("member", member);
+        map.put("accountList", accountService.entityToDtoList(myAccountList));
+
+        return ResponseEntity.ok(map);
     }
 
     //== 이름 등록 ==//
