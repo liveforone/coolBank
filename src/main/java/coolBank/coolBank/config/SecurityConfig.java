@@ -4,7 +4,9 @@ import coolBank.coolBank.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -35,21 +37,26 @@ public class SecurityConfig {
         return auth;
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web -> web.ignoring().requestMatchers("/css", "/js", "/lib"));
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web -> web.ignoring().requestMatchers("/css", "/js", "/lib"));
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .formLogin().disable()
                 .csrf().disable()  //csrf 끔.
                 .authenticationProvider(authenticationProvider())  //provider 등록
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/member/my-page").authenticated()
-                        .requestMatchers("/normal-account/post").authenticated()
-                        .requestMatchers("/credit-account/post").authenticated()
+                .authorizeRequests((authorize) -> authorize
+                        .requestMatchers(
+                                "/",
+                                "/member/signup",
+                                "/member/login"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/admin").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
