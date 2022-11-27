@@ -180,7 +180,7 @@ public class MemberService implements UserDetailsService {
         그 다음부터 어드민이 업데이트 할때에는 auth 칼럼으로 판별해서 db 업데이트 하지않고,
         GrantedAuthority 만 업데이트 해준다.
          */
-        if (member.getAuth() != Role.ADMIN && ("admin@breve.com").equals(email)) {
+        if (member.getAuth() != Role.ADMIN && ("admin@coolbank.com").equals(email)) {
             authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
             memberRepository.updateAuth(Role.ADMIN, memberRequest.getEmail());
         } else if (member.getAuth() == Role.ADMIN) {
