@@ -6,15 +6,19 @@ import coolBank.coolBank.account.service.AccountService;
 import coolBank.coolBank.member.model.Member;
 import coolBank.coolBank.member.service.MemberService;
 import coolBank.coolBank.statement.dto.StateRequest;
+import coolBank.coolBank.statement.dto.StateResponse;
 import coolBank.coolBank.statement.service.StatementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.security.Principal;
@@ -29,6 +33,19 @@ public class StatementController {
     private final MemberService memberService;
 
     public static final int PASSWORD_MATCH = 1;
+
+    @GetMapping("/statement/{accountNumber}")
+    public ResponseEntity<?> statementPage(
+            @PageableDefault(page = 0, size = 20)
+            @SortDefault.SortDefaults({
+                    @SortDefault(sort = "id", direction = Sort.Direction.DESC)
+            }) Pageable pageable,
+            @PathVariable("accountNumber") String accountNumber
+    ) {
+        Page<StateResponse> statementList = statementService.getStatementList(accountNumber, pageable);
+
+        return ResponseEntity.ok(statementList);
+    }
 
     @PostMapping("/deposit")
     public ResponseEntity<?> deposit(
