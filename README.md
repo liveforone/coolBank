@@ -30,6 +30,33 @@
 ## ERD Diagram
 ## API 설계
 ## Json Body
+### member
+```
+{
+    "email" : "yc1234@gmail.com",
+    "password" : "1234"
+}
+{
+    "email" : "ms1234@gmail.com",
+    "password" : "1234"
+}
+{
+    "email" : "admin@coolbank.com",
+    "password" : "1234"
+}
+{
+    "oldPassword" : "1234",
+    "newPassword" : "1111"
+}
+```
+### statement
+```
+{
+    "accountNumber" : "416890941366",
+    "money" : 40000,
+    "password" : "1234"
+}
+```
 ## 연관관계
 
 # 3. 스타일 가이드
@@ -42,19 +69,11 @@
 * entity -> dto 변환 편의메소드는 컨트롤러에서 사용한다.
 
 # 4. 상세 설명
-## 스프링부트 버전 변경으로 인한 스프링 시큐리티 변경사항
-* 스프링부트가 3.0(GA)버전으로 변경이 되며 스프링 시큐리티또한 약간의 변화가 있었다.
-* 이번 프로젝트코드를 중심으로 설명한다.
-* authorizeRequests() 부분이 authorizeHttpRequests()로 변경되었다.
-* 아래는 예제이다.
-```
-.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/member/my-page").authenticated()
-                        .requestMatchers("/normal-account/post").authenticated()
-                        .requestMatchers("/credit-account/post").authenticated()
-)
-```
+## 입금, 송금, 출금
+* statementController에서 입금, 송금, 출금을 관리한다.
+* 입금과 출금의 경우에는 사용자가 '나'이다. 즉 내 계좌로 입금, 출금이다.
+* 송금의 경우에는 내가 다른 사람의 계좌로 '송금'하는 api이다.
+* 송금시에는 statement, 즉 거래내역이 두개가 찍힌다.
 
 # 5. 나의 고민
 
@@ -82,6 +101,7 @@ enum값 가져와서 if 마이너스통장 인경우 마이너스로 떨어지�
 @SortDefault(sort = "id", direction = Sort.Direction.DESC)
 }) Pageable pageable,
 
-입출금(게좌 balance update 쿼리로) 만들고 입출금 내역 만들기(내역에는 페이징 20개)
-입출금 내역은 status에 송금/입금이 있고 송금횟수는 입출금내역을 계좌에 맞게 찾으면서 
+거래 내역 만들기(내역에는 페이징 20개)
+
+송금횟수는 입출금내역을 계좌에 맞게 찾으면서 
 and status = 송금 인 쿼리로 짜서 가져온다.
