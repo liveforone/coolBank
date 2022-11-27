@@ -115,7 +115,7 @@ public class MemberController {
 
     /*
     로그아웃은 시큐리티 단에서 이루어짐.
-    url : /user/logout
+    url : /member/logout
     method : POST
      */
 
