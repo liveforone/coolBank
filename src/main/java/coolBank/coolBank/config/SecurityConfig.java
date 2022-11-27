@@ -45,7 +45,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()  //csrf 끔.
                 .authenticationProvider(authenticationProvider())  //provider 등록
-                .authorizeRequests(authorize -> authorize
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/member/my-page").authenticated()
                         .requestMatchers("/normal-account/post").authenticated()
