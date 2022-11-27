@@ -26,9 +26,22 @@ public class AccountService {
     /*
     * 계좌 번호 만드는 함수
     * 12자리의 숫자를 무작위로 생성하여 문자열로 리턴
+    * 중복을 체크하여 중복되지 않는 계좌 번호를 리턴한다.
      */
     private String makeAccountNumber() {
-        return RandomStringUtils.random(12, 33, 125, false, true);
+        String accountNumber;
+
+        while (true) {
+            String randNum = RandomStringUtils.random(12, 33, 125, false, true);
+            Account account = accountRepository.findOneByAccountNumber(randNum);
+
+            if (account == null) {  //중복 체크
+                accountNumber = randNum;
+                break;
+            }
+        }
+
+        return accountNumber;
     }
 
     //== dto -> entity ==//
