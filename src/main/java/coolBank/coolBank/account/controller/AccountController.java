@@ -27,7 +27,7 @@ public class AccountController {
 
     @GetMapping("/account/{id}")
     public ResponseEntity<?> accountDetail(@PathVariable("id") Long id) {
-        Account account = accountService.getAccountDetail(id);
+        Account account = accountService.getAccountDetailById(id);
 
         if (account == null) {
             return ResponseEntity.ok("해당 계좌가 없어 조회가 불가능합니다.");

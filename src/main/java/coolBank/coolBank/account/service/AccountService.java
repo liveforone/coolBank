@@ -75,8 +75,16 @@ public class AccountService {
         return accountRepository.findCreditAccount(email, Category.CREDIT);
     }
 
-    public Account getAccountDetail(Long id) {
+    public Account getAccountDetailById(Long id) {
         return accountRepository.findOneById(id);
+    }
+
+    public Account getAccountDetailByEmail(String email) {
+        return accountRepository.findOneByEmail(email);
+    }
+
+    public Account getAccountDetailByNumber(String accountNumber) {
+        return accountRepository.findOneByAccountNumber(accountNumber);
     }
 
     //== 일반 통장 개설 ==//
@@ -111,5 +119,15 @@ public class AccountService {
         return accountRepository.save(
                 dtoToEntity(dto)
         ).getId();
+    }
+
+    @Transactional
+    public void deposit(String accountNumber, int money) {
+        accountRepository.depositAccount(accountNumber, money);
+    }
+
+    @Transactional
+    public void withdraw(String accountNumber, int money) {
+        accountRepository.withdrawAccount(accountNumber, money);
     }
 }
