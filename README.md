@@ -39,8 +39,22 @@
 * 매직넘버는 전부 상수화해서 처리한다.
 * 분기문은 반드시 gate-way 스타일로 한다.
 * [gate-way 스타일](https://github.com/liveforone/study/blob/main/GoodCode/%EB%8D%94%20%EC%A2%8B%EC%9D%80%20%EB%B6%84%EA%B8%B0%EB%AC%B8.md)
+* entity -> dto 변환 편의메소드는 컨트롤러에서 사용한다.
 
 # 4. 상세 설명
+## 스프링부트 버전 변경으로 인한 스프링 시큐리티 변경사항
+* 스프링부트가 3.0(GA)버전으로 변경이 되며 스프링 시큐리티또한 약간의 변화가 있었다.
+* 이번 프로젝트코드를 중심으로 설명한다.
+* authorizeRequests() 부분이 authorizeHttpRequests()로 변경되었다.
+* 아래는 예제이다.
+```
+.authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/member/my-page").authenticated()
+                        .requestMatchers("/normal-account/post").authenticated()
+                        .requestMatchers("/credit-account/post").authenticated()
+)
+```
 
 # 5. 나의 고민
 
@@ -50,9 +64,6 @@
 이체수수료(등급별) 넣기
 
 유저들어가면 내 계좌 나오고
-계좌는 최대 2개까지 개설가능하며 계좌 개설시 현재 가지고 있는 계좌 조회해서 수량 체크해서 되는지 안되는지 파악하기
-
-마이너스통장 개설하면 마이너스 가능한 account를 하나 또 생성함
 
 enum값 가져와서 if 마이너스통장 인경우 마이너스로 떨어지는 계산 가능하게 하기
 
@@ -62,10 +73,7 @@ enum값 가져와서 if 마이너스통장 인경우 마이너스로 떨어지�
 통장번호(id말고) 존재할것임. 송금 대출 등 모두 통장 번호로조회해서 사용한다.
 
 돈관련 행위를 할때마다 비밀번호 match
-계좌 테이블 : localDate, double형
 대출테이블 : 이자, localDate
-
-엔티티만들고 서버 실행해서 엔티티 네이밍 에러 안터지나 미리 확인후 그 다음 작업 진행
 
 대출관해사도 깊이 생각해보기 테이블을 따로 뺄건지 어떻게 할것인지 생각해보기
 
@@ -74,5 +82,6 @@ enum값 가져와서 if 마이너스통장 인경우 마이너스로 떨어지�
 @SortDefault(sort = "id", direction = Sort.Direction.DESC)
 }) Pageable pageable,
 
--추가사항
-마이페이지에 계좌 넣기
+입출금(게좌 balance update 쿼리로) 만들고 입출금 내역 만들기(내역에는 페이징 20개)
+입출금 내역은 status에 송금/입금이 있고 송금횟수는 입출금내역을 계좌에 맞게 찾으면서 
+and status = 송금 인 쿼리로 짜서 가져온다.
