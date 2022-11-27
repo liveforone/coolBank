@@ -1,6 +1,7 @@
 package coolBank.coolBank.statement.controller;
 
 import coolBank.coolBank.account.model.Account;
+import coolBank.coolBank.account.model.Category;
 import coolBank.coolBank.account.service.AccountService;
 import coolBank.coolBank.member.model.Member;
 import coolBank.coolBank.member.service.MemberService;
@@ -143,6 +144,36 @@ public class StatementController {
 
         if (checkPasswordMatching != PASSWORD_MATCH) {
             return ResponseEntity.ok("비밀번호가 다릅니다. 다시 시도하세요");
+        }
+
+        /*
+        * 마이너스 통장일 경우 계좌 잔액 분기 처리전 바로 빠져나감.
+         */
+        if (account.getCategory() == Category.CREDIT) {
+            accountService.withdraw(
+                    request.getAccountNumber(),
+                    request.getMoney()
+            );
+            log.info("출금 성공");
+            statementService.saveStatementWithdraw(
+                    request.getAccountNumber(),
+                    request.getMoney()
+            );
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setLocation(URI.create("/member/my-page"));
+
+            return ResponseEntity
+                    .status(HttpStatus.MOVED_PERMANENTLY)
+                    .headers(httpHeaders)
+                    .build();
+        }
+
+        /*
+        * 마이너스 통장이 아닐경우 계좌 잔액과 출금 금액 비교하는 분기처리를 거침.
+         */
+        if (request.getMoney() > account.getBalance()) {
+            return ResponseEntity.ok("출금 금액이 잔액보다 많아 불가능합니다.");
         }
 
         accountService.withdraw(
