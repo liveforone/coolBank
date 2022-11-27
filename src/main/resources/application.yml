@@ -5,6 +5,7 @@ spring:
     username: root
     password: 159624
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: create
     properties:
