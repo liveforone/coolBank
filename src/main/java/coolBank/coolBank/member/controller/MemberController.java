@@ -141,6 +141,7 @@ public class MemberController {
         map.put("accountList", accountService.entityToDtoList(myAccountList));
 
         memberService.updateGrade(myAccountList.get(0).getId());
+        log.info("회원 등급 새로고침");
 
         return ResponseEntity.ok(map);
     }
