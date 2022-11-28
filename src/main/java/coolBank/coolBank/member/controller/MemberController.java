@@ -140,6 +140,8 @@ public class MemberController {
         map.put("member", member);
         map.put("accountList", accountService.entityToDtoList(myAccountList));
 
+        memberService.updateGrade(myAccountList.get(0).getId());
+
         return ResponseEntity.ok(map);
     }
 

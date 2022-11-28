@@ -1,11 +1,15 @@
 package coolBank.coolBank.member.service;
 
+import coolBank.coolBank.account.repository.AccountRepository;
 import coolBank.coolBank.member.dto.MemberRequest;
 import coolBank.coolBank.member.dto.MemberResponse;
 import coolBank.coolBank.member.model.Grade;
 import coolBank.coolBank.member.model.Member;
 import coolBank.coolBank.member.model.Role;
 import coolBank.coolBank.member.repository.MemberRepository;
+import coolBank.coolBank.statement.model.State;
+import coolBank.coolBank.statement.model.Statement;
+import coolBank.coolBank.statement.repository.StatementRepository;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.RandomStringUtils;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +35,8 @@ import java.util.List;
 public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+    private final StatementRepository statementRepository;
+    private final AccountRepository accountRepository;
 
     public static final int DUPLICATE = 0;
     public static final int NOT_DUPLICATE = 1;
@@ -71,6 +77,29 @@ public class MemberService implements UserDetailsService {
     //== 무작위 닉네임 생성 - 숫자 + 문자 ==//
     public String makeRandomNickname() {
         return RandomStringUtils.randomAlphanumeric(10);
+    }
+
+    //== 회원 등급 체크 ==//
+    public Grade checkMemberGrade(List<Statement> statementList) {
+        int size = statementList.size();
+
+        if (size > 1000) {
+            return Grade.DIA;
+        }
+
+        if (size > 500) {
+            return Grade.PLATINUM;
+        }
+
+        if (size > 100) {
+            return Grade.GOLD;
+        }
+
+        if (size > 50) {
+            return Grade.SILVER;
+        }
+
+        return Grade.BRONZE;
     }
 
     //== 이메일 중복 검증 ==//
@@ -212,6 +241,24 @@ public class MemberService implements UserDetailsService {
         String newPassword =  passwordEncoder.encode(inputPassword);
 
         memberRepository.updatePassword(id, newPassword);
+    }
+
+    @Transactional
+    public void updateGrade(Long accountId) {
+        List<Statement> statement = statementRepository.findStatementByAccountIdAndSend(
+                accountId,
+                State.SEND
+        );
+        Long memberId = accountRepository.findOneById(accountId).getMember().getId();
+
+        if (statement.isEmpty()) {
+            return;
+        }
+
+        memberRepository.updateGrade(
+                checkMemberGrade(statement),
+                memberId
+        );
     }
 
     @Transactional

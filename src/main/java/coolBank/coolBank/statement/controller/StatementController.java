@@ -128,7 +128,7 @@ public class StatementController {
                 request.getAccountNumber(),
                 request.getMoney()
         );
-        statementService.saveStatementWithdraw(
+        statementService.saveStatementSend(
                 myAccount.getAccountNumber(),
                 request.getMoney()
         );

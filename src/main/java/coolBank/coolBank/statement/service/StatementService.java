@@ -59,6 +59,19 @@ public class StatementService {
     }
 
     @Transactional
+    public void saveStatementSend(String accountNumber, int money) {
+        Account account = accountRepository.findOneByAccountNumber(accountNumber);
+
+        Statement statement = Statement.builder()
+                .state(State.SEND)
+                .money(money)
+                .account(account)
+                .build();
+
+        statementRepository.save(statement);
+    }
+
+    @Transactional
     public void saveStatementWithdraw(String accountNumber, int money) {
         Account account = accountRepository.findOneByAccountNumber(accountNumber);
 

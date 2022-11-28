@@ -1,5 +1,6 @@
 package coolBank.coolBank.member.repository;
 
+import coolBank.coolBank.member.model.Grade;
 import coolBank.coolBank.member.model.Member;
 import coolBank.coolBank.member.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +30,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Modifying
     @Query("update Member m set m.password = :password where m.id = :id")
     void updatePassword(@Param("id") Long id, @Param("password") String password);
+
+    @Modifying
+    @Query("update Member m set m.grade = :grade where m.id = :id")
+    void updateGrade(@Param("grade") Grade grade, @Param("id") Long id);
 }

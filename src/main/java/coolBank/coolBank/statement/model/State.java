@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum State {
 
     DEPOSIT("STATE_DEPOSIT"),
+    SEND("STATE_SEND"),
     WITHDRAW("STATE_WITHDRAW");
 
     private String value;
