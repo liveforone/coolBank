@@ -3,6 +3,7 @@ package coolBank.coolBank.statement.controller;
 import coolBank.coolBank.account.model.Account;
 import coolBank.coolBank.account.model.Category;
 import coolBank.coolBank.account.service.AccountService;
+import coolBank.coolBank.member.model.Grade;
 import coolBank.coolBank.member.model.Member;
 import coolBank.coolBank.member.service.MemberService;
 import coolBank.coolBank.statement.dto.StateRequest;
@@ -32,7 +33,8 @@ public class StatementController {
     private final AccountService accountService;
     private final MemberService memberService;
 
-    public static final int PASSWORD_MATCH = 1;
+    private static final int PASSWORD_MATCH = 1;
+    private static final int THOUSAND_WON = 10000000;
 
     @GetMapping("/statement/{accountNumber}")
     public ResponseEntity<?> statementPage(
@@ -102,6 +104,10 @@ public class StatementController {
 
         if (request.getMoney() > myAccount.getBalance()) {
             return ResponseEntity.ok("송금 금액이 잔액보다 많아 불가능합니다.");
+        }
+
+        if (request.getMoney() >= THOUSAND_WON) {
+            return ResponseEntity.ok("송금 금액이 너무 커서 불가능합니다.");
         }
 
         int checkPasswordMatching = memberService.checkPasswordMatching(
