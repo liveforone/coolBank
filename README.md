@@ -144,3 +144,4 @@ account -> member, manyToOne 단방향
 
 # 6. 새롭게 추가한 점
 * 널체크는 util 클래스를 만들고 커스텀 함수인 isNull()을 이용해 처리하는 것으로 전면 수정함.
+* HttpHeaders 축약 함수로 가독성 및 중복코드 제거함.
