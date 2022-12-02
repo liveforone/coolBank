@@ -3,6 +3,7 @@ package coolBank.coolBank.account.controller;
 import coolBank.coolBank.account.model.Account;
 import coolBank.coolBank.account.service.AccountService;
 import coolBank.coolBank.member.service.MemberService;
+import coolBank.coolBank.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +31,7 @@ public class AccountController {
     public ResponseEntity<?> accountDetail(@PathVariable("id") Long id) {
         Account account = accountService.getAccountDetailById(id);
 
-        if (account == null) {
+        if (CommonUtils.isNull(account)) {
             return ResponseEntity.ok("해당 계좌가 없어 조회가 불가능합니다.");
         }
 
@@ -65,7 +66,7 @@ public class AccountController {
     public ResponseEntity<?> makeCreditAccount(Principal principal) {
         Account creditAccount = accountService.getCreditAccount(principal.getName());
 
-        if (creditAccount != null) {
+        if (!CommonUtils.isNull(creditAccount)) {
             return ResponseEntity.ok("이미 마이너스 통장이 존재합니다.");
         }
 

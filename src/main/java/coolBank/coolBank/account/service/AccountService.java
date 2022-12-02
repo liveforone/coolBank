@@ -7,6 +7,7 @@ import coolBank.coolBank.account.model.Category;
 import coolBank.coolBank.account.repository.AccountRepository;
 import coolBank.coolBank.member.model.Member;
 import coolBank.coolBank.member.repository.MemberRepository;
+import coolBank.coolBank.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class AccountService {
             String randNum = RandomStringUtils.random(12, 33, 125, false, true);
             Account account = accountRepository.findOneByAccountNumber(randNum);
 
-            if (account == null) {  //중복 체크
+            if (CommonUtils.isNull(account)) {  //중복 체크
                 accountNumber = randNum;
                 break;
             }

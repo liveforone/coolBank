@@ -9,6 +9,7 @@ import coolBank.coolBank.member.service.MemberService;
 import coolBank.coolBank.statement.dto.StateRequest;
 import coolBank.coolBank.statement.dto.StateResponse;
 import coolBank.coolBank.statement.service.StatementService;
+import coolBank.coolBank.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -57,7 +58,7 @@ public class StatementController {
         Account account = accountService.getAccountDetailByNumber(request.getAccountNumber());
         Member member = memberService.getMemberEntity(principal.getName());
 
-        if (account == null) {
+        if (CommonUtils.isNull(account)) {
             return ResponseEntity.ok("계좌가 존재하지 않습니다. 올바른 번호를 적어주세요");
         }
 
@@ -98,7 +99,7 @@ public class StatementController {
         Account myAccount = accountService.getAccountDetailByEmail(principal.getName());
         Member member = memberService.getMemberEntity(principal.getName());
 
-        if (account == null) {
+        if (CommonUtils.isNull(account)) {
             return ResponseEntity.ok("계좌가 존재하지 않습니다. 올바른 번호를 적어주세요");
         }
 
@@ -156,7 +157,7 @@ public class StatementController {
         Account account = accountService.getAccountDetailByNumber(request.getAccountNumber());
         Member member = memberService.getMemberEntity(principal.getName());
 
-        if (account == null) {
+        if (CommonUtils.isNull(account)) {
             return ResponseEntity.ok("계좌가 존재하지 않습니다. 올바른 번호를 적어주세요");
         }
 
