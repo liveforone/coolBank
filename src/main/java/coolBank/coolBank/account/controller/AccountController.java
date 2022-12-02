@@ -51,10 +51,8 @@ public class AccountController {
         Long accountId = accountService.saveNormalAccount(principal.getName());
         log.info("일반 계좌 생성 성공");
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/account/" + accountId
-        ));
+        String url = "/account/" + accountId;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
@@ -73,10 +71,8 @@ public class AccountController {
         Long accountId = accountService.saveCreditAccount(principal.getName());
         log.info("마이너스 계좌 생성 성공");
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/account/" + accountId
-        ));
+        String url = "/account/" + accountId;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)

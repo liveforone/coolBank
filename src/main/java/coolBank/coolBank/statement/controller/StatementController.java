@@ -81,8 +81,8 @@ public class StatementController {
                 request.getMoney()
         );
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/member/my-page"));
+        String url = "/member/my-page";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
@@ -140,8 +140,8 @@ public class StatementController {
                 request.getMoney()
         );
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/member/my-page"));
+        String url = "/member/my-page";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
@@ -184,8 +184,8 @@ public class StatementController {
                     request.getMoney()
             );
 
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setLocation(URI.create("/member/my-page"));
+            String url = "/member/my-page";
+            HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
             return ResponseEntity
                     .status(HttpStatus.MOVED_PERMANENTLY)
@@ -210,8 +210,8 @@ public class StatementController {
                 request.getMoney()
         );
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/member/my-page"));
+        String url = "/member/my-page";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)

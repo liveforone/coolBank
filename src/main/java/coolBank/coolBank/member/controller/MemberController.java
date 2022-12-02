@@ -60,8 +60,8 @@ public class MemberController {
                     .ok("중복되는 이메일이 있어 회원가입이 불가능합니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/"));  //해당 경로로 리다이렉트
+        String url = "/";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         memberService.joinUser(memberRequest);
         log.info("회원 가입 성공!!");
@@ -99,8 +99,8 @@ public class MemberController {
             return ResponseEntity.ok("비밀번호가 일치하지 않습니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/member/my-page"));
+        String url = "/member/my-page";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         memberService.login(
                 memberRequest,
@@ -160,10 +160,8 @@ public class MemberController {
                     .ok("중복되는 닉네임이 있어 수정 불가능합니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/member/my-page"
-        ));
+        String url = "/member/my-page";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         memberService.updateNickname(
                 nickname,
@@ -220,10 +218,8 @@ public class MemberController {
             return ResponseEntity.ok("비밀번호가 다릅니다. 다시 입력해주세요.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/member/logout"
-        ));
+        String url = "/member/logout";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         memberService.updateEmail(
                 principal.getName(),
@@ -260,10 +256,8 @@ public class MemberController {
             return ResponseEntity.ok("비밀번호가 다릅니다. 다시 입력해주세요.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/member/logout"
-        ));
+        String url = "/member/logout";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         memberService.updatePassword(
                 member.getId(),
