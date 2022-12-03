@@ -1,7 +1,7 @@
 # CoolBank
 > 은행업무를 간편하게, CoolBank
 
-## 기술 스택
+# 1. 기술 스택
 * Spring Boot 3.0.0
 * Language : Java17
 * DB : MySql
@@ -11,11 +11,11 @@
 * Gradle
 * Apache commons lang3
 
-# 1. 설명
+# 2. 설명
 * 간편하게 송금, 이체, 입금, 출금 등 은행 서비스를 할 수 있게 하는 은행 플랫폼이다.
 * 간편결제 기능은 넣지 않고 오로지 원래의 은행서비스에 집중한다.
 
-# 2. 설계
+# 3. 설계
 * 사용자는 반드시 실명을 기입하되, mysql 예약어에 걸리지않게 컬럼이름은 nickname으로 한다.
 * 회원은 송금 횟수로 등급을 매긴다.
 * 하루 송금 제한 금액은 모든 등급에 한해 일천만원으로 제한한다.
@@ -92,16 +92,16 @@ statement -> account, manyToOne 단방향
 account -> member, manyToOne 단방향
 ```
 
-# 3. 스타일 가이드
-* 유저를 제외한 모든 객체의 Null체크 + 중복 체크(유저는 시큐리티 단에서 이미 체크한다.)
-* 함수와 긴 변수의 경우 줄바꿈 가이드를 지켜 작성한다.
-* [줄바꿈 가이드](https://github.com/liveforone/study/blob/main/GoodCode/%EC%A4%84%EB%B0%94%EA%BF%88%EC%9C%BC%EB%A1%9C%20%EA%B0%80%EB%8F%85%EC%84%B1%20%ED%96%A5%EC%83%81.md)
-* 매직넘버는 전부 상수화해서 처리한다.
-* 분기문은 반드시 gate-way 스타일로 한다.
-* [gate-way 스타일](https://github.com/liveforone/study/blob/main/GoodCode/%EB%8D%94%20%EC%A2%8B%EC%9D%80%20%EB%B6%84%EA%B8%B0%EB%AC%B8.md)
+# 4. 스타일 가이드
+* 유저를 제외한 모든 객체의 [널체크](https://github.com/liveforone/study/blob/main/GoodCode/%EA%B0%9D%EC%B2%B4%20null%EC%B2%B4%ED%81%AC%EC%99%80%20%EC%A4%91%EB%B3%B5%EC%B2%B4%ED%81%AC.md) + 중복 체크
+* 함수와 긴 변수의 경우 [줄바꿈 가이드](https://github.com/liveforone/study/blob/main/GoodCode/%EC%A4%84%EB%B0%94%EA%BF%88%EC%9C%BC%EB%A1%9C%20%EA%B0%80%EB%8F%85%EC%84%B1%20%ED%96%A5%EC%83%81.md)를 지켜 작성한다.
+* 매직넘버는 전부 [상수화](https://github.com/liveforone/study/blob/main/GoodCode/%EB%A7%A4%EC%A7%81%EB%84%98%EB%B2%84%20%EC%83%81%EC%88%98%EB%A1%9C%20%ED%95%B4%EA%B2%B0.md)해서 처리한다.
+* 분기문은 반드시 [게이트웨이](https://github.com/liveforone/study/blob/main/GoodCode/%EB%8D%94%20%EC%A2%8B%EC%9D%80%20%EB%B6%84%EA%B8%B0%EB%AC%B8.md) 스타일로 한다.
 * entity -> dto 변환 편의메소드는 리스트나 페이징이 아닌 경우 컨트롤러에서 사용한다.
+* [HttpHeader 처리 함수](https://github.com/liveforone/study/blob/main/GoodCode/HttpHeaders%20%EC%83%9D%EC%84%B1%20%ED%95%A8%EC%88%98.md)
+* 스프링 시큐리티에서 권한 체크 필요한것만 매핑하고 나머지(anyRequest)는 authenticated 로 설정해 코드를 줄이고 가독성 향상한다.
 
-# 4. 상세 설명
+# 5. 상세 설명
 ## 입금, 송금, 출금
 * statementController에서 입금, 송금, 출금을 관리한다.
 * 입금과 출금의 경우에는 사용자가 '나'이다. 즉 내 계좌로 입금, 출금이다.
@@ -120,7 +120,7 @@ account -> member, manyToOne 단방향
 * 500건 초과 PLATINUM
 * 1000건 초과 DIA
 
-# 5. 나의 고민
+# 6. 나의 고민
 ## RandomStringUtils로 무작위 문자형 숫자 만들때 중복
 * 아무리 라이브러리로 12짜리의 무작위 문자형 숫자를 만든다 한들 중복이 안생길 수있나?
 * 하는 의문이 지속하여 들었다.
@@ -142,6 +142,7 @@ account -> member, manyToOne 단방향
 * gate way 스타일의 분기문을 처리할때에는 절차적으로 분기순서를 따져야 논리오류나 다른 오류가 발생하지않고
 * 정상적으로 작동한다. 따라서 gate way 스타일의 분기는 절차를 잘 따져보아야 한다.
 
-# 6. 새롭게 추가한 점
+# 7. 새롭게 추가한 점
 * 널체크는 util 클래스를 만들고 커스텀 함수인 isNull()을 이용해 처리하는 것으로 전면 수정함.
 * HttpHeaders 축약 함수로 가독성 및 중복코드 제거함.
+* 스타일 가이드 추가함
